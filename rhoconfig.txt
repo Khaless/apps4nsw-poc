@@ -1,0 +1,45 @@
+# Startup page for your application
+start_path = '/app/Search?type=recent'
+
+# Path to the options page (in this case handled by javascript)
+options_path = '/app/Settings'
+
+# Location of bundle url (i.e. from rhohub.com)
+rhobundle_zip_url = ''
+
+# Optional password to access bundle (usually not required)
+rhobundle_zip_pwd = nil
+
+# Rhodes runtime properties
+MinSeverity  = 0
+LogToOutput = 1
+LogCategories = *
+ExcludeLogCategories =
+KeepTrackOfLastVisitedPage = 0
+LastVisitedPage = ''
+
+# Sync server url. Typically this will look like 'http://<hostname>:<port>/application'
+# For example: 'http://localhost:9292/application'
+syncserver = ''
+
+# To disable auto sync, uncomment the following line.
+# sync_poll_interval=0
+
+logserver = 'http://rhologs.heroku.com'
+logname='poc'
+
+# Hides forward button and animates back button transition
+jqtouch_mode=1
+
+# Geocoding URL, sprintf format, first %s represents param type (address or latlong). Second %s represents 
+# the value of this key
+google_geocoding_url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&%s=%s'
+
+# Data URL base (no trailing slash)
+data_url_base = 'http://afariademo.gotdns.com/clients/apps4nsw'
+#data_url_base = '/public/data'
+
+# App Parameters
+appname = 'Sydney Buses'
+version = '0.1'
+

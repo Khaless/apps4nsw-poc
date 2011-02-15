@@ -1,0 +1,16 @@
+<%= render :partial => "partials/navbar", :locals => { :use_html_nav => @use_html_nav, :nav_left => @nav_left, :nav_right => @nav_right } %>
+<div class="content">
+	<ul>
+		<% if @past_searches.length == 0 %>
+			<li>
+				<a href="#"><img src="/public/images/184-warning.png" style="width: 20px; height: 16px; margin: 4px 10px 0 10px; " /> No Recent Searches</a>
+			</li>
+		<% else %>
+			<% @past_searches.each do |search| %>
+				<li>
+					<%= link_to sprintf("<b>%s</b>, <i>%s</i>", search.location, search.category), url_for_type(:action => :map, :query => { :search_id => search.object, :dontsave => true }) %>
+				</li>
+			<% end %>
+		<% end %>
+	</ul>
+</div>
