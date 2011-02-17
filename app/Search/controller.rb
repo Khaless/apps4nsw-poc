@@ -284,15 +284,28 @@ class SearchController < Rho::RhoController
     
     @map_annotations =  [{:latitude => @lat, :longitude => @long, :title => "Current location", :subtitle => ""}]
 
-	doc = REXML::Document.new(@params['body'])
-			doc.elements.each("vehicle") do |props|
-			  { 
-			  @map_annotations[] => [{:latitude => props.elements["latitude"].text, :longitude => props.elements["longitude"].text, :title => props.elements["vehicleID"].text, :subtitle => props.elements["routeName"].text}]	
-			}	
+            require 'rexml/document'
+        
+            xml = REXML::Document.new(@params['body'])
+			puts "\nThe routeName, latitude and longitude of all vehicles" 
+# Test parsing XML
+			xml.elements.each("//vehicle") {|c| puts "routeName=" + c.attributes["routeName"], (puts "longitude=" + c.attributes["longitude"]), (puts "latitude=" + c.attributes["latitude"]) } 
+#			xml.elements.each("//vehicle") {|c| routeName[] = c.attributes["routeName"], ( longitude[] = c.attributes["longitude"]), (latitude[] = c.attributes["latitude"]) } 
 
-puts "vehicleID in XML:" + vehicleID
 
-			end
+#			(map_annotations[] => [:latitude => c.attributes["latitude"], :longitude => c.attributes["longitude"], :title => c.attributes["routeName"], :subtitle => c.attributes["vehicleID"]) }	
+#			puts "routeName=" + c.attributes["routeName"], (puts "longitude=" + c.attributes["longitude"]), (puts "latitude=" + c.attributes["latitude"]) } 
+
+
+#	doc = REXML::Document.new(@params['body'])
+#			doc.elements.each("vehicle") do |props|
+#			  { 
+#			  @map_annotations[] => [{:latitude => props.elements["latitude"].text, :longitude => props.elements["longitude"].text, :title => props.elements["vehicleID"].text, :subtitle => props.elements["routeName"].text}]	
+#			}	
+#
+#puts "vehicleID in XML:" + vehicleID
+
+#			end
 
 #   annotations = obj["vehicle"].map do |pf|
 #			{ :latitude => pf["latitude"],
