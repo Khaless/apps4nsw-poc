@@ -292,7 +292,7 @@ class SearchController < Rho::RhoController
 				  :longitude => pf["longitude"],
 				  :title => pf["route_name"],
 				  :subtitle => pf["service_description"],				  
-				  :url => "/app/Search/details?" + query_hash_to_str(pf)
+				  :url => "/app/Search/details?" + query_hash_to_str(pf.merge({:type => @params["type"]}))
 				  }
 				  #id=" + @params["id"] + "&id=" + pf["updated_at"] + "&updated_at=" + pf["organization"] + " " +  pf["addressStreetName"]  + " " + pf["addressCity"] + " " + pf["addressZipCode"] + "&facilityType=" + pf["facilityType"] + 	"&numberOfSpaces=" + pf["numberOfSpaces"] + 	"&telephoneNumber=" + pf["telephoneNumber"]}
 		end
@@ -380,55 +380,5 @@ class SearchController < Rho::RhoController
 			WebView.navigate url_for(:action => action, :query => default_query_hash)
 		end
 		
-class MyStreamListener
- 
-        def initialize(events)
-            @events = events
-        end
- 
-        def tag_start name, attrs
-            puts "tag_start: #{name}; #{attrs}"
-            @events << attrs if name == 'vehicle'
-			
-
-        end
-        def tag_end name
-            #puts "tag_end: #{name}"
-        end
-        def text text
-            puts "text: #{text}"
-        end
-        def instruction name, instruction
-        end
-        def comment comment
-        end
-        def doctype name, pub_sys, long_name, uri
-        end
-        def doctype_end
-        end
-        def attlistdecl element_name, attributes, raw_content
-        end
-        def elementdecl content
-        end
-        def entitydecl content
-        end
-        def notationdecl content
-        end
-        def entity content
-        end
-        def cdata content
-            #puts "cdata: #{content}"
-        end
-        def xmldecl version, encoding, standalone
-        end
-    end
- 
-def parse_xml(str_xml)
-        @events = []
-        list = MyStreamListener.new(@events)
-        REXML::Document.parse_stream(str_xml, list)
-end
-        
-
 end
 
