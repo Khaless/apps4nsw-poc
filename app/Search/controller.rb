@@ -286,47 +286,14 @@ class SearchController < Rho::RhoController
 			})
 		end
 
-    obj = @params["body"]
-
-=begin
-    annotations = obj["vehicle"].map do |pf|
-			{ :latitude => pf["latitude"],
-				:longitude => pf["longitude"]
-				}
-				
-#				:title => pf["service_description"],
-#				:subtitle => pf["route_name"]}
-#				:url => "/app/Search/details?type=" + @params["type"] + "&entityName=" + pf["entityName"] + "&address=" + pf["addressBuilding"] + " " +  pf["addressStreetName"]  + " " + pf["addressCity"] + " " + pf["addressZipCode"] + "&facilityType=" + pf["facilityType"] + 	"&numberOfSpaces=" + pf["numberOfSpaces"] + 	"&telephoneNumber=" + pf["telephoneNumber"]}
+    annotations = @params["body"].map do |pf|
+    	  pf = pf["vehicle"]
+			  { :latitude => pf["latitude"],
+				  :longitude => pf["longitude"],
+				  :title => pf["service_description"],
+				  :subtitle => pf["route_name"] }
+					#:url => "/app/Search/details?type=" + @params["type"] + "&entityName=" + pf["entityName"] + "&address=" + pf["addressBuilding"] + " " +  pf["addressStreetName"]  + " " + pf["addressCity"] + " " + pf["addressZipCode"] + "&facilityType=" + pf["facilityType"] + 	"&numberOfSpaces=" + pf["numberOfSpaces"] + 	"&telephoneNumber=" + pf["telephoneNumber"]}
 		end
-=end
-
-=begin
-require 'rexml/document'
-        
-           xml = REXML::Document.new(@params['body'])
-
-#			REXML::XPath.each(xml, "//vehicle") { |e| puts e.text }
-
-#			puts "\nThe routeName, latitude and longitude of all vehicles" 
-
-#			xml.elements.each("//vehicle") {|c| puts "routeName=" + c.attributes["routeName"], (puts "longitude=" + c.attributes["longitude"]), (puts "latitude=" + c.attributes["latitude"]) } 
-
-			annotations = xml.elements.each("//vehicle") {|c| @routeName = c.attributes["routeName"], (puts @routeName), ( @longitude = c.attributes["longitude"]), (@latitude = c.attributes["latitude"]), (@vehicleID = c.attributes["vehicleID"]) } 
-
-#		annotations = xml.elements.each("//vehicle") {|c| @businfo = c.attributes["routeName"], (puts @businfo) } 
-
-#		annotations = xml.elements.each("//vehicle") do |attributes| 
-#		{:routeName => attributes["routeName"].to_s, 
-#		:longitude =>  attributes["longitude"].to_s, 
-#		:latitude =>  attributes["latitude"].to_s, 
-#		:vehicleID => attributes["vehicleID"].to_s 
-#		}
-#		end
-
-# puts "Results Latitude in XML: routeName=" + @routeName[1]	 + ", vehicleID=" + @vehicleID[1] + ",latitude=" + @latitude[1] + ",longitude=" + @longitude[1]
- puts "Array Size = " + annotations.size.to_s
-=end
-
 
 	#map_type has to be "standard" for Android
 	
@@ -336,16 +303,8 @@ require 'rexml/document'
 				:region => [@lat, @long, 0.01, 0.01],
 				:zoom_enabled => true,
 				:scroll_enabled => true
-			}
-#	 		 :annotations => annotations
-=begin
-			:annotations => [{:latitude => @latitude, 
-                            :longitude => @longitude, 
-                             :title => @routeName, 
-                             :subtitle => @vehicleID}] 			
-=end
-#			:annotations => map_annotations
-#			:annotations => [{:latitude => @lat, :longitude => @long, :title => "Current location", :subtitle => ""}]
+			},
+			:annotations => annotations
 		}
 		
 		# Show the map
