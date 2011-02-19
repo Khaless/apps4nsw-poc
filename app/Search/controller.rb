@@ -290,9 +290,11 @@ class SearchController < Rho::RhoController
     	  pf = pf["vehicle"]
 			  { :latitude => pf["latitude"],
 				  :longitude => pf["longitude"],
-				  :title => pf["service_description"],
-				  :subtitle => pf["route_name"] }
-					#:url => "/app/Search/details?type=" + @params["type"] + "&entityName=" + pf["entityName"] + "&address=" + pf["addressBuilding"] + " " +  pf["addressStreetName"]  + " " + pf["addressCity"] + " " + pf["addressZipCode"] + "&facilityType=" + pf["facilityType"] + 	"&numberOfSpaces=" + pf["numberOfSpaces"] + 	"&telephoneNumber=" + pf["telephoneNumber"]}
+				  :title => pf["route_name"],
+				  :subtitle => pf["service_description"],				  
+				  :url => "/app/Search/details?" + query_hash_to_str(pf)
+				  }
+				  #id=" + @params["id"] + "&id=" + pf["updated_at"] + "&updated_at=" + pf["organization"] + " " +  pf["addressStreetName"]  + " " + pf["addressCity"] + " " + pf["addressZipCode"] + "&facilityType=" + pf["facilityType"] + 	"&numberOfSpaces=" + pf["numberOfSpaces"] + 	"&telephoneNumber=" + pf["telephoneNumber"]}
 		end
 
 	#map_type has to be "standard" for Android

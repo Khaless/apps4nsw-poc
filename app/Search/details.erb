@@ -2,22 +2,32 @@
 <div class="content">
 	<ul>
 		<li>
-			<div class="itemLabel">Name</div>
-			<div class="itemValue"><%= @params['entityName']%></div>
+			<div class="itemLabel">vehicle ID</div>
+			<div class="itemValue"><%= @params['id']%></div>
 		</li>
 		<li>
-			<%= link_to @params['address'], "/system/map?q="+ @params['address'] %>
+			<div class="itemLabel">Route Direction</div>
+			<div class="itemValue"><%= @params['route_direction']%></div>
 		</li>
 		<li>
-			<a href="tel:<%= @params["telephoneNumber"] %>" target="_blank" rel="external">+<%= @params['telephoneNumber'] %></a>
+			<div class="itemLabel">Service Description</div>
+			<div class="itemValue"><%= @params['service_description']%></div>
 		</li>
 		<li>
-			<div class="itemLabel">Facility Type</div>
-			<div class="itemValue"><%= @params['facilityType']%></div>
+			<div class="itemLabel">Trip Status</div>
+			<div class="itemValue"><%= @params['trip_status']%></div>
 		</li>
 		<li>
-			<div class="itemLabel">No of Spaces</div>
-			<div class="itemValue"><%= @params['numberOfSpaces']%></div>
+		    <div class="itemLabel">Distance</div>
+			<div class="itemValue"><%= @params['distance']%></div>
+		</li>
+		<li>
+			<div class="itemLabel">Organisation</div>
+			<div class="itemValue"><%= @params['organisation']%></div>
+		</li>
+		<li>
+			<div class="itemLabel">Updated At:</div>
+			<div class="itemValue"><%= @params['updated_at']%></div>
 		</li>
 	</ul>
 </div>
