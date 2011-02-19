@@ -36,7 +36,13 @@ jqtouch_mode=1
 google_geocoding_url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&%s=%s'
 
 # Data URL base (no trailing slash)
-data_url_base = 'https://s3.amazonaws.com/apps4nsw-poc'
+#data_url_base = 'http://s3.amazonaws.com/apps4nsw-poc'
+data_url_base = 'http://apps4nsw.mathew.com.au/vehicles/by_location'
+
+
+
+# Category
+appcategory = 'Bus Info"
 
 # App Parameters
 appname = 'Sydney Buses'

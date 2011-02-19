@@ -44,6 +44,10 @@ class SearchController < Rho::RhoController
   
   # Dispatch a user to the correct action
   def index
+  # get Category from rhoconfig
+    @appcategory = Rho::RhoConfig.appcategory
+
+  
   	resolve_type
 		if @search_type == :nearby and !GeoLocation.known_position? and (@params["lat"].nil? and @params["long"].nil?)
 			navbar :title => "Nearby"
@@ -233,16 +237,18 @@ class SearchController < Rho::RhoController
 			params = { :lat => @lat, :long => @long, :location => @location, :search_id => @search.object } 
 		end
 		
-		# Call WS to get XML
+		# Call WS to get XML passing in lat long
 		
-		url = sprintf("%s/vehicles.xml", Rho::RhoConfig.data_url_base, Rho::RhoSupport.url_encode(@lat), Rho::RhoSupport.url_encode(@long))
+		url = sprintf("%s/%s,%s", Rho::RhoConfig.data_url_base, Rho::RhoSupport.url_encode(@lat), Rho::RhoSupport.url_encode(@long))
+		
+		#url = sprintf("%s/vehicles.xml", Rho::RhoConfig.data_url_base, Rho::RhoSupport.url_encode(@lat), Rho::RhoSupport.url_encode(@long))
 		puts " Calling URL: " + url
 		Rho::AsyncHttp.get(
 				:url => url,
 				:callback => (url_for_type :action => :display_mapped_data_callback),
 				:callback_param => query_hash_to_str(default_query_hash.merge(params)))
 		
-		@message = "Retrieving data. Please ensure your device has a data connection.."
+		@message = "Retrieving data for location. Please ensure your device has a data connection.."
 		render :action => :wait
 
 	end
@@ -279,37 +285,49 @@ class SearchController < Rho::RhoController
 				:last_use_time => Time.now
 			})
 		end
-    	
-#    obj = parse_xml(@params["body"])
-    
-    		@routeName = []
-			@vehicleID = []
-			@longitude = []
-			@latitude = []			
-			
-            require 'rexml/document'
+
+    obj = @params["body"]
+
+=begin
+    annotations = obj["vehicle"].map do |pf|
+			{ :latitude => pf["latitude"],
+				:longitude => pf["longitude"]
+				}
+				
+#				:title => pf["service_description"],
+#				:subtitle => pf["route_name"]}
+#				:url => "/app/Search/details?type=" + @params["type"] + "&entityName=" + pf["entityName"] + "&address=" + pf["addressBuilding"] + " " +  pf["addressStreetName"]  + " " + pf["addressCity"] + " " + pf["addressZipCode"] + "&facilityType=" + pf["facilityType"] + 	"&numberOfSpaces=" + pf["numberOfSpaces"] + 	"&telephoneNumber=" + pf["telephoneNumber"]}
+		end
+=end
+
+=begin
+require 'rexml/document'
         
-            xml = REXML::Document.new(@params['body'])
-			puts "\nThe routeName, latitude and longitude of all vehicles" 
-	#			xml.elements.each("//vehicle") {|c| puts "routeName=" + c.attributes["routeName"], (puts "longitude=" + c.attributes["longitude"]), (puts "latitude=" + c.attributes["latitude"]) } 
-			xml.elements.each("//vehicle") {|c| @routeName = c.attributes["routeName"], ( @longitude = c.attributes["longitude"]), (@latitude = c.attributes["latitude"]), (@vehicleID = c.attributes["vehicleID"]) } 
+           xml = REXML::Document.new(@params['body'])
 
-# 		@annotation << {:latitude => @latitude, 
-#        :longitude => @longitude, 
-#        :title => @routeName, 
-#        :subtitle => @vehicleID 
-#        }
- 
- puts "Results Latitude in XML:" + @latitude + "," + @longitude
- 
+#			REXML::XPath.each(xml, "//vehicle") { |e| puts e.text }
 
-#   annotations = obj["vehicle"].map do |pf|
-#			{ :latitude => pf["latitude"],
-#				:longitude => pf["longitude"],
-#				:title => pf["vehicleID"],
-#				:subtitle => pf["routeName"]
-#			}
-#		end			
+#			puts "\nThe routeName, latitude and longitude of all vehicles" 
+
+#			xml.elements.each("//vehicle") {|c| puts "routeName=" + c.attributes["routeName"], (puts "longitude=" + c.attributes["longitude"]), (puts "latitude=" + c.attributes["latitude"]) } 
+
+			annotations = xml.elements.each("//vehicle") {|c| @routeName = c.attributes["routeName"], (puts @routeName), ( @longitude = c.attributes["longitude"]), (@latitude = c.attributes["latitude"]), (@vehicleID = c.attributes["vehicleID"]) } 
+
+#		annotations = xml.elements.each("//vehicle") {|c| @businfo = c.attributes["routeName"], (puts @businfo) } 
+
+#		annotations = xml.elements.each("//vehicle") do |attributes| 
+#		{:routeName => attributes["routeName"].to_s, 
+#		:longitude =>  attributes["longitude"].to_s, 
+#		:latitude =>  attributes["latitude"].to_s, 
+#		:vehicleID => attributes["vehicleID"].to_s 
+#		}
+#		end
+
+# puts "Results Latitude in XML: routeName=" + @routeName[1]	 + ", vehicleID=" + @vehicleID[1] + ",latitude=" + @latitude[1] + ",longitude=" + @longitude[1]
+ puts "Array Size = " + annotations.size.to_s
+=end
+
+
 	#map_type has to be "standard" for Android
 	
 		map_params = {
@@ -318,12 +336,14 @@ class SearchController < Rho::RhoController
 				:region => [@lat, @long, 0.01, 0.01],
 				:zoom_enabled => true,
 				:scroll_enabled => true
-			},
+			}
+#	 		 :annotations => annotations
+=begin
 			:annotations => [{:latitude => @latitude, 
-                             :longitude => @longitude, 
+                            :longitude => @longitude, 
                              :title => @routeName, 
                              :subtitle => @vehicleID}] 			
-#	 		 :annotations => @annotation 
+=end
 #			:annotations => map_annotations
 #			:annotations => [{:latitude => @lat, :longitude => @long, :title => "Current location", :subtitle => ""}]
 		}
